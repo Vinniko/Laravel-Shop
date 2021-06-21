@@ -20,6 +20,7 @@ class CreateProductsTable extends Migration
             $table->string('title')->unique();
             $table->decimal('price');
             $table->double('qty');
+            $table->json('options')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
