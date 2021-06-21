@@ -20,6 +20,7 @@ class Product extends Model
         'title',
         'price',
         'qty',
+        'options'
     ];
 
     /**
@@ -31,5 +32,6 @@ class Product extends Model
         'id' => 'integer',
         'price' => 'decimal:3',
         'qty' => 'double',
+        'options' => 'array'
     ];
 }
