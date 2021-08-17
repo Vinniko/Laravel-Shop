@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateProductsTable extends Migration
 {
+    private $tableName = 'products';
+
     /**
      * Run the migrations.
      *
@@ -15,12 +17,11 @@ class CreateProductsTable extends Migration
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create($this->tableName, function (Blueprint $table) {
             $table->id();
-            $table->string('title')->unique();
+            $table->string('title');
             $table->decimal('price');
-            $table->double('qty');
-            $table->json('options')->nullable();
+            $table->integer('qty');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -35,6 +36,6 @@ class CreateProductsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists($this->tableName);
     }
 }
