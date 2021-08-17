@@ -77,6 +77,7 @@ return [
             'driver' => 'redis',
             'connection' => 'cache',
             'lock_connection' => 'default',
+            'lifetime' => env('REDIS_CACHE_LIFETIME', 30)  // время жизни кэша в redis, в секундах
         ],
 
         'dynamodb' => [

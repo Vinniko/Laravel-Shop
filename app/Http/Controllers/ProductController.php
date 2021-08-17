@@ -8,6 +8,7 @@ use App\Http\Resources\InfoResource;
 use App\Http\Resources\ProductResource;
 use App\Models\Option;
 use App\Models\Product;
+use App\Services\ProductsRedisHandler;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -16,12 +17,16 @@ class ProductController extends Controller
     const MAX_PRODUCTS_ON_PAGE = 40;
     private $delete_message = 'Продукт был успешно удален.';
 
-    public function index(): JsonResource
+    public function index(ProductsRedisHandler $productsRedisHandler): JsonResource
     {
-        $products = Product::with('options')->orderByDesc('created_at')
-            ->paginate(self::MAX_PRODUCTS_ON_PAGE);
+        $products = unserialize($productsRedisHandler->handler(null, function (){
+            $products =  Product::with('options')->orderByDesc('created_at')
+                ->paginate(self::MAX_PRODUCTS_ON_PAGE);
 
-        return ProductResource::collection($products);
+            return serialize(ProductResource::collection($products));
+        }));
+
+        return $products;
     }
 
     /**
@@ -74,7 +79,7 @@ class ProductController extends Controller
      * @param ProductStoreRequest $request
      * @return JsonResource
      */
-    public function store(ProductStoreRequest $request): JsonResource
+    public function store(ProductStoreRequest $request, ProductsRedisHandler $productsRedisHandler): JsonResource
     {
         $product = Product::firstOrCreate([
             'title' => $request['title'],
@@ -86,6 +91,8 @@ class ProductController extends Controller
             $this->setOptions($product, $request['options']);
         }
 
+        $productsRedisHandler->update();
+
         return new ProductResource($product);
     }
 
@@ -95,13 +102,15 @@ class ProductController extends Controller
      * @param Product $product
      * @return JsonResource
      */
-    public function edit(ProductUpdateRequest $request, Product $product): JsonResource
+    public function edit(ProductUpdateRequest $request, Product $product, ProductsRedisHandler $productsRedisHandler): JsonResource
     {
         $product->update($request->all());
 
         if ($request->has('options')) {
             $this->setOptions($product, $request['options']);
         }
+
+        $productsRedisHandler->update();
 
         return new ProductResource($product);
     }
@@ -111,9 +120,10 @@ class ProductController extends Controller
      * @param Product $product
      * @return JsonResource
      */
-    public function delete(Product $product): JsonResource
+    public function delete(Product $product, ProductsRedisHandler $productsRedisHandler): JsonResource
     {
         $product->delete();
+        $productsRedisHandler->update();
 
         return new InfoResource([
             'message' => $this->delete_message,
@@ -137,5 +147,4 @@ class ProductController extends Controller
 
         $product->options()->sync($tmp);
     }
-
 }
