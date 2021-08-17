@@ -26,8 +26,7 @@ class ProductFactory extends Factory
         return [
             'title' => $this->faker->unique()->word(),
             'price' => $this->faker->randomFloat(0, 0, 999.),
-            'qty' => $this->faker->randomFloat(0, 0, 999.),
-            'options' => ["size" => $this->faker->word(), "color" => $this->faker->word()]
+            'qty' => $this->faker->numberBetween(0, 999),
         ];
     }
 }

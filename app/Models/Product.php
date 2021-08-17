@@ -4,7 +4,10 @@ namespace App\Models;;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use SleepingOwl\Admin\Form\Related\Forms\BelongsTo;
+use SleepingOwl\Admin\Form\Related\Forms\HasMany;
 
 class Product extends Model
 {
@@ -20,7 +23,6 @@ class Product extends Model
         'title',
         'price',
         'qty',
-        'options'
     ];
 
     /**
@@ -34,4 +36,9 @@ class Product extends Model
         'qty' => 'double',
         'options' => 'array'
     ];
+
+    public function options(): BelongsToMany
+    {
+        return $this->belongsToMany(Option::class, 'options_products')->withPivot('value');
+    }
 }

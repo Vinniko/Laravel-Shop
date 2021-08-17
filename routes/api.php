@@ -18,6 +18,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
-Route::get('/products', [App\Http\Controllers\ProductController::class, 'index'])->middleware(['auth:api']);
-Route::get('/products/filter', [App\Http\Controllers\ProductController::class, 'filter'])->middleware(['auth:api']);
+Route::group(['prefix' => 'products'], function (){
+    Route::get('/all', [App\Http\Controllers\ProductController::class, 'index']);#->middleware(['auth:api']);
+    Route::get('/filter', [App\Http\Controllers\ProductController::class, 'filter']);#->middleware(['auth:api']);
+    Route::get('/get/{product:id}', [App\Http\Controllers\ProductController::class, 'show']);#->middleware(['auth:api']);
+    Route::post('/store', [App\Http\Controllers\ProductController::class, 'store']);#->middleware(['auth:api']);
+    Route::put('/edit/{product:id}', [App\Http\Controllers\ProductController::class, 'edit']);#->middleware(['auth:api']);
+    Route::delete('/delete/{product:id}', [App\Http\Controllers\ProductController::class, 'delete']);#->middleware(['auth:api']);
+});
