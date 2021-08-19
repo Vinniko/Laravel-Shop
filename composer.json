@@ -12,7 +12,8 @@
         "laravel/framework": "^8.40",
         "laravel/passport": "^10.1",
         "laravel/tinker": "^2.5",
-        "laravel/ui": "^3.3"
+        "laravel/ui": "^3.3",
+        "laravelrus/sleepingowl": "^8.44"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

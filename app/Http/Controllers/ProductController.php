@@ -19,6 +19,7 @@ class ProductController extends Controller
 
     public function index(ProductsRedisHandler $productsRedisHandler): JsonResource
     {
+        dd(Option::with('values')->find(1));
         $products = unserialize($productsRedisHandler->handler(null, function (){
             $products =  Product::with('options')->orderByDesc('created_at')
                 ->paginate(self::MAX_PRODUCTS_ON_PAGE);

@@ -20,6 +20,7 @@ class OptionsProducts extends Migration
             $table->foreignId('option_id')->references('id')->on('options');
             $table->foreignId('product_id')->references('id')->on('products');
             $table->string('value');
+            $table->timestamps();
         });
     }
 
