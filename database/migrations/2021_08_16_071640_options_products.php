@@ -17,8 +17,10 @@ class OptionsProducts extends Migration
     {
         Schema::create($this->tableName, function (Blueprint $table) {
             $table->id();
-            $table->foreignId('option_id')->references('id')->on('options');
-            $table->foreignId('product_id')->references('id')->on('products');
+            $table->foreignId('option_id')->references('id')->on('options')
+                ->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('product_id')->references('id')->on('products')
+                ->onUpdate('cascade')->onDelete('cascade');
             $table->string('value');
             $table->timestamps();
         });
