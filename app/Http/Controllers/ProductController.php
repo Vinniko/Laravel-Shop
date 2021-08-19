@@ -6,6 +6,7 @@ use App\Http\Requests\ProductStoreRequest;
 use App\Http\Requests\ProductUpdateRequest;
 use App\Http\Resources\InfoResource;
 use App\Http\Resources\ProductResource;
+use App\Interfaces\ISearcher;
 use App\Models\Option;
 use App\Models\Product;
 use App\Services\ProductsRedisHandler;
@@ -17,9 +18,12 @@ class ProductController extends Controller
     const MAX_PRODUCTS_ON_PAGE = 40;
     private $delete_message = 'Продукт был успешно удален.';
 
+    /**
+     * @param ProductsRedisHandler $productsRedisHandler
+     * @return JsonResource
+     */
     public function index(ProductsRedisHandler $productsRedisHandler): JsonResource
     {
-        dd(Option::with('values')->find(1));
         $products = unserialize($productsRedisHandler->handler(null, function (){
             $products =  Product::with('options')->orderByDesc('created_at')
                 ->paginate(self::MAX_PRODUCTS_ON_PAGE);
@@ -65,6 +69,13 @@ class ProductController extends Controller
         return ProductResource::collection($products);
     }
 
+    public function search(string $query = '', ISearcher $searcher): JsonResource
+    {
+        $products = $searcher->search($query);
+
+        return ProductResource::collection($products);
+    }
+
     /**
      * Получение конкретного товара
      * @param Product $product
@@ -78,6 +89,7 @@ class ProductController extends Controller
     /**
      * Создание товара
      * @param ProductStoreRequest $request
+     * @param ProductsRedisHandler $productsRedisHandler
      * @return JsonResource
      */
     public function store(ProductStoreRequest $request, ProductsRedisHandler $productsRedisHandler): JsonResource
@@ -101,6 +113,7 @@ class ProductController extends Controller
      * Изменение товара
      * @param ProductUpdateRequest $request
      * @param Product $product
+     * @param ProductsRedisHandler $productsRedisHandler
      * @return JsonResource
      */
     public function edit(ProductUpdateRequest $request, Product $product, ProductsRedisHandler $productsRedisHandler): JsonResource
@@ -119,6 +132,7 @@ class ProductController extends Controller
     /**
      * Удаление товара
      * @param Product $product
+     * @param ProductsRedisHandler $productsRedisHandler
      * @return JsonResource
      */
     public function delete(Product $product, ProductsRedisHandler $productsRedisHandler): JsonResource
