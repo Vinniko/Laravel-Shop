@@ -31,6 +31,15 @@ Config Elasticsearch:
 ELASTICSEARCH_ENABLED=true
 ELASTICSEARCH_HOSTS="localhost:9200"
 ```
+Config RabbitMQ
+```
+QUEUE_CONNECTION=rabbitmq
+RABBITMQ_DSN=amqp://
+RABBITMQ_HOST=127.0.0.1
+RABBITMQ_USER=admin
+RABBITMQ_PASSWORD=password
+RABBITMQ_QUEUE=jobs
+```
 Run composer install
 
 ```bash
@@ -58,4 +67,9 @@ Enter in browser:
 
 ```bash 
 localhost:8000
+```
+
+For starting queue of tasks:
+```
+php artisan queue:work
 ```
