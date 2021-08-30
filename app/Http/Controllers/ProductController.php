@@ -7,6 +7,7 @@ use App\Http\Requests\ProductUpdateRequest;
 use App\Http\Resources\InfoResource;
 use App\Http\Resources\ProductResource;
 use App\Interfaces\ISearcher;
+use App\Jobs\ReindexElasticSearch;
 use App\Models\Option;
 use App\Models\Product;
 use App\Services\ProductsRedisHandler;
@@ -142,6 +143,15 @@ class ProductController extends Controller
 
         return new InfoResource([
             'message' => $this->delete_message,
+        ]);
+    }
+
+    public function reindex(): JsonResource
+    {
+        ReindexElasticSearch::dispatch();
+
+        return new InfoResource([
+            'message' => "Переиндексирование товаров запущено",
         ]);
     }
 
