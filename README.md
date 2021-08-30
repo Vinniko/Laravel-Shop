@@ -31,7 +31,7 @@ Config Elasticsearch:
 ELASTICSEARCH_ENABLED=true
 ELASTICSEARCH_HOSTS="localhost:9200"
 ```
-Config RabbitMQ
+Config RabbitMQ:
 ```
 QUEUE_CONNECTION=rabbitmq
 RABBITMQ_DSN=amqp://
