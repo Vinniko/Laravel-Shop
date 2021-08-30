@@ -14,7 +14,8 @@
         "laravel/passport": "^10.1",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.3",
-        "laravelrus/sleepingowl": "^8.44"
+        "laravelrus/sleepingowl": "^8.44",
+        "vladimir-yuldashev/laravel-queue-rabbitmq": "^11.3"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
